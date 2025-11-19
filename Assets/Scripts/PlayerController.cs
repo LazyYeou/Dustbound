@@ -4,12 +4,12 @@ public class PlayerController : MonoBehaviour
 {
     public float movementSpeed = 5.0f;
     public Rigidbody2D rb;
+    public Vector2 lastDirection;
 
-    private Vector2 _lastDirection;
     private Vector2 _moveDirection;
     void Start()
     {
-        _lastDirection = new Vector2(1, 0);
+        lastDirection = new Vector2(1, 0);
     }
 
     void Update()
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
         if (inputX != 0 || inputY != 0)
         {
-            _lastDirection = _moveDirection;
+            lastDirection = _moveDirection;
         }
     }
 

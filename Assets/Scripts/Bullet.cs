@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     public float lifetime = 5f;
     public int damage = 1;
 
-    void Setup(Vector2 dir)
+    public void Setup(Vector2 dir)
     {
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -16,10 +16,11 @@ public class Bullet : MonoBehaviour
         GetComponent<Rigidbody2D>().linearVelocity = dir * bulletSpeed;
     }
 
-    void OollisionEnter2D(Collision2D collision, Collider2D collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Enemy"))
         {
+            Debug.Log("HIT");
             Destroy(gameObject);
         }
     }
