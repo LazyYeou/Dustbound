@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour
     public Vector2 lastDirection;
 
     private Vector2 _moveDirection;
+    private SpriteRenderer _spriteRenderer;
     void Start()
     {
         lastDirection = new Vector2(1, 0);
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -39,6 +41,14 @@ public class PlayerController : MonoBehaviour
     void Move()
     {
         rb.linearVelocity = _moveDirection * movementSpeed;
+        if (_moveDirection.x < 0)
+        {
+            _spriteRenderer.flipX = true;
+        }
+        else
+        {
+            _spriteRenderer.flipY = false;
+        }
     }
 
     void Logging(float inputX, float inputY, Vector2 moveDir)

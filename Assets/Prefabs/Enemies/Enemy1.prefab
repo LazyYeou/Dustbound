@@ -191,9 +191,9 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7173394926866570648}
   rb: {fileID: 8831473219196494664}
   moveSpeed: 1
-  damage: 0
   health: 0
   range: 3
   experienceToGive: 0
   attackFx: {fileID: 4055869666263640517, guid: c13212c4f9fafb94fbde07f1a12075db, type: 3}
+  deathFx: {fileID: 5961291417611366331, guid: 74aed683bd0efd44ea5a9cdb9e952350, type: 3}
   animator: {fileID: 2203555171219075424}

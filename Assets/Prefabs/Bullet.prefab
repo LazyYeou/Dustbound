@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -327649842630505146}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -175,6 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf18341ebe29ff649b8c81db5d07d3a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 7.03
-  lifetime: 5
-  damage: 1
+  speed: 10
+  damage: 3
+  critChance: 0.1
+  critMultiplier: 2
+  knockbackForce: 3
