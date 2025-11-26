@@ -138,3 +138,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expAmount: 10
+  pickupRange: 1.5
+  moveSpeed: 8
+  accelerationRate: 1.5
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleOnApproach: 1
+  minScale: 0.8
+  maxScale: 1.2
+  scaleSpeed: 3
+  rotateWhileMoving: 1
+  rotationSpeed: 360
+  collectParticlePrefab: {fileID: 1996715196518549519, guid: 59dc340cecafd484a88bcd8d5dac6d8b, type: 3}
+  trailParticlePrefab: {fileID: 0}
+  spawnWithAnimation: 1
+  spawnDuration: 0.3
+  spawnHeight: 1
