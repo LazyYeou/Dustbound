@@ -47,6 +47,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private bool shakeOnHit = true;
     [SerializeField] private float shakeIntensity = 0.1f;
 
+    [Header("Attack Settings")]
+    public float attackInterval = 0.5f; // How often to attack (in seconds)
+    private float attackTimer = 0f;     // Internal timer to track cooldown
+
     private Transform player;
     private Rigidbody2D rb;
     private SpriteRenderer spriteRenderer;
@@ -92,6 +96,11 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null || isDying) return;
         if (isKnockedBack) return;
+
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.fixedDeltaTime;
+        }
 
         Vector2 direction = (player.position - transform.position).normalized;
         rb.linearVelocity = direction * speed;
@@ -465,10 +474,18 @@ public class EnemyController : MonoBehaviour
 
         if (distanceToPlayer <= damageRadius)
         {
-            PlayerStats stats = player.GetComponent<PlayerStats>();
-            if (stats != null)
+            // 2. CHECK: Is the timer ready? (<= 0)
+            if (attackTimer <= 0)
             {
-                stats.TakeDamage(damageToPlayer * Time.fixedDeltaTime);
+                PlayerStats stats = player.GetComponent<PlayerStats>();
+                if (stats != null)
+                {
+                    // 3. DEAL DAMAGE (Send the full amount, DO NOT multiply by Time.deltaTime)
+                    stats.TakeDamage(damageToPlayer);
+
+                    // 4. RESET TIMER
+                    attackTimer = attackInterval;
+                }
             }
         }
     }

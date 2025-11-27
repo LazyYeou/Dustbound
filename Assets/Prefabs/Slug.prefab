@@ -106,7 +106,7 @@ MonoBehaviour:
   health: 5
   maxHealth: 5
   speed: 1
-  damageToPlayer: 2
+  damageToPlayer: 0.1
   expGemPrefab: {fileID: 5082481555388098727, guid: a0c1696e16027e74999685138ae4b075, type: 3}
   damagePopupPrefab: {fileID: 8959470992491319923, guid: 9689168a5254177428daaaf72ef4f81e, type: 3}
   flashMaterial: {fileID: 2100000, guid: 79a513bc2598577409c27286345a774a, type: 2}

@@ -34,12 +34,16 @@ public class PlayerStats : MonoBehaviour
     public WeaponController weaponController;
     private SpriteRenderer spriteRenderer;
 
+    private Animator animator;
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         currentHealth = maxHealth;
         currentExp = 0;
         lastFacingDir = Vector2.right;
+
+        animator = GetComponent<Animator>();
 
         UpdateHealthUI();
         UpdateExpUI();
@@ -56,6 +60,19 @@ public class PlayerStats : MonoBehaviour
 
         if (moveDir.x > 0) spriteRenderer.flipX = true;
         else if (moveDir.x < 0) spriteRenderer.flipX = false;
+
+        if (animator != null)
+        {
+            // Check if we are moving
+            bool isMoving = moveDir.magnitude > 0;
+
+            // Send this boolean to the Unity Animator
+            // Make sure the parameter name "IsMoving" matches EXACTLY what we set in the Editor later
+            animator.SetBool("IsMoving", isMoving);
+
+            // Ensure speed is always 1 (in case you had the old Freeze code)
+            animator.speed = 1f;
+        }
     }
 
     void FixedUpdate()
