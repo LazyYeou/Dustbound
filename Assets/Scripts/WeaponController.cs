@@ -228,22 +228,22 @@ public class WeaponController : MonoBehaviour
 
         GameObject b = Instantiate(bulletPrefab, position, rotation);
 
-        // Scale in animation
-        if (scaleInBullets)
-        {
-            StartCoroutine(ScaleInBullet(b.transform));
-        }
-
-        // Setup bullet component
+        // --- NEW: APPLY STATS TO BULLET ---
         Bullet bulletComp = b.GetComponent<Bullet>();
-        if (bulletComp != null)
+        if (bulletComp != null && player != null)
         {
+            // Calculate Crit
+            bool isCrit = Random.value < player.critChance;
+            float finalMult = player.damageMultiplier * (isCrit ? player.critDamage : 1f);
+
+            // Assuming your Bullet script has a 'damage' and 'Setup' method
+            // If not, you need to add public float damage to your Bullet script
+            bulletComp.damage *= finalMult;
             bulletComp.Setup(direction);
         }
-        else
-        {
-            Destroy(b);
-        }
+        // ----------------------------------
+
+        if (scaleInBullets) StartCoroutine(ScaleInBullet(b.transform));
 
         return b;
     }

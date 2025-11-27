@@ -6,7 +6,7 @@ public class DamagePopup : MonoBehaviour
     private TextMeshPro textMesh;
     private float disappearTimer = 1f;
 
-    public void Setup(int damageAmount, bool isCritical)
+    public void Setup(float damageAmount, bool isCritical)
     {
         textMesh = GetComponent<TextMeshPro>();
         textMesh.text = damageAmount.ToString();

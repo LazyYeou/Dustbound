@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 6207459557365626962}
   - component: {fileID: 7261631369906236630}
   - component: {fileID: 3016703744680256083}
+  - component: {fileID: 3838111712766424898}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Slug
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.989, y: 0.695, z: 0}
-  m_LocalScale: {x: 0.03, y: 0.03, z: 0.03}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,9 +80,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -118276438430088029, guid: 7111b33ede633184cab82470a228651c, type: 3}
+  m_Sprite: {fileID: -2613262032382192127, guid: 1368e2a93c924cc4eb94173b0e37cc93, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -102,11 +103,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2aea941a67e5284f959652c49d7b429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 10
-  speed: 2
+  health: 5
+  maxHealth: 5
+  speed: 1
+  damageToPlayer: 2
   expGemPrefab: {fileID: 5082481555388098727, guid: a0c1696e16027e74999685138ae4b075, type: 3}
   damagePopupPrefab: {fileID: 8959470992491319923, guid: 9689168a5254177428daaaf72ef4f81e, type: 3}
   flashMaterial: {fileID: 2100000, guid: 79a513bc2598577409c27286345a774a, type: 2}
+  autoFlipTowardsPlayer: 1
+  flipX: 1
+  flipSmoothness: 0.1
+  damageRadius: 1
+  useDeathAnimation: 1
+  deathAnimationType: 4
+  deathAnimationDuration: 0.45
+  deathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.070007324
+      value: 0.99619293
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  flashOnDeath: 0
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashCount: 3
+  flashSpeed: 0.1
+  knockbackOnDeath: 0
+  deathKnockbackForce: 5
+  rotateOnDeath: 0
+  rotationSpeed: 720
+  deathFxPrefab: {fileID: 0}
+  shakeOnHit: 1
+  shakeIntensity: 0.1
 --- !u!50 &7261631369906236630
 Rigidbody2D:
   serializedVersion: 5
@@ -164,7 +209,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -172,11 +217,33 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 30.719997, y: 30.719997}
+    oldSize: {x: 0.64, y: 0.64}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 30.719997, y: 30.719997}
+  m_Size: {x: 0.52, y: 0.52}
   m_EdgeRadius: 0
+--- !u!95 &3838111712766424898
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8954662287262683073}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4de8c27907c8e334c8412bf63671d6eb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
