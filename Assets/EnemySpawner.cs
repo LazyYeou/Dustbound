@@ -1,20 +1,31 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [System.Serializable]
+    public class EnemyType
+    {
+        public string name;
+        public GameObject prefab;
+        [Range(0f, 100f)] public float spawnWeight = 10f; // Higher number = higher chance
+        public int minDifficultyLevel = 1; // Only spawn after this level
+    }
+
     [Header("Basic Settings")]
-    public GameObject enemyPrefab;
     public Transform player;
+    // REPLACED single prefab with a List
+    public List<EnemyType> enemyTypes = new List<EnemyType>();
 
     [Header("Spawn Rate Settings")]
     public float baseInterval = 2f;
-    public float minimumInterval = 0.3f; // Fastest spawn rate
-    public float intervalDecreaseRate = 0.1f; // How much to decrease each difficulty increase
+    public float minimumInterval = 0.3f;
+    public float intervalDecreaseRate = 0.1f;
     private float currentInterval;
     private float timer;
 
     [Header("Difficulty Scaling")]
-    public float difficultyIncreaseInterval = 20f; // Time between difficulty increases
+    public float difficultyIncreaseInterval = 20f;
     public DifficultyScalingMode scalingMode = DifficultyScalingMode.SpawnRate;
     private float difficultyTimer;
     private int currentDifficultyLevel = 1;
@@ -22,15 +33,11 @@ public class EnemySpawner : MonoBehaviour
     [Header("Enemy Count Settings")]
     public int baseEnemiesPerSpawn = 1;
     public int maxEnemiesPerSpawn = 5;
-    public int enemyIncreasePerLevel = 1; // How many more enemies per difficulty level
+    public int enemyIncreasePerLevel = 1;
 
     [Header("Enemy Stats Scaling")]
-    public bool scaleEnemyHealth = true;
-    public float healthMultiplierPerLevel = 1.15f; // 15% more health per level
-    public bool scaleEnemySpeed = true;
-    public float speedMultiplierPerLevel = 1.1f; // 10% faster per level
-    public bool scaleEnemyDamage = true;
-    public float damageMultiplierPerLevel = 1.1f;
+    public bool scaleEnemyStats = true; // Simplified boolean
+    public float statMultiplierPerLevel = 1.1f; // 10% stronger per level
 
     [Header("Spawn Position Settings")]
     public float minSpawnDistance = 10f;
@@ -50,10 +57,10 @@ public class EnemySpawner : MonoBehaviour
 
     public enum DifficultyScalingMode
     {
-        SpawnRate,          // Spawn enemies faster
-        EnemyCount,         // Spawn more enemies at once
-        EnemyStats,         // Make enemies stronger
-        Combined            // All of the above
+        SpawnRate,
+        EnemyCount,
+        EnemyStats,
+        Combined
     }
 
     void Start()
@@ -67,7 +74,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (player == null) return;
 
-        // Difficulty progression timer
+        // Difficulty Timer
         difficultyTimer -= Time.deltaTime;
         if (difficultyTimer <= 0)
         {
@@ -75,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
             difficultyTimer = difficultyIncreaseInterval;
         }
 
-        // Wave cooldown
+        // Wave Logic
         if (isInWaveCooldown)
         {
             timer -= Time.deltaTime;
@@ -87,7 +94,7 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        // Spawn timer
+        // Spawn Timer
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
@@ -105,36 +112,111 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // --- NEW SPAWN LOGIC ---
+
+    void Spawn()
+    {
+        int enemyCount = GetEnemyCount();
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            SpawnSingleEnemy();
+        }
+    }
+
+    void SpawnWave()
+    {
+        for (int i = 0; i < waveSize; i++)
+        {
+            SpawnSingleEnemy();
+        }
+    }
+
+    void SpawnSingleEnemy()
+    {
+        // 1. Pick a random enemy based on weights and level
+        GameObject prefabToSpawn = GetRandomEnemyPrefab();
+
+        if (prefabToSpawn != null)
+        {
+            Vector3 spawnPos = GetValidSpawnPosition();
+            GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
+
+            // 2. Make them stronger based on level
+            ApplyDifficultyModifiers(enemy);
+        }
+    }
+
+    GameObject GetRandomEnemyPrefab()
+    {
+        // Filter list: Get only enemies allowed at this difficulty level
+        List<EnemyType> allowedEnemies = new List<EnemyType>();
+        float totalWeight = 0f;
+
+        foreach (var type in enemyTypes)
+        {
+            if (currentDifficultyLevel >= type.minDifficultyLevel)
+            {
+                allowedEnemies.Add(type);
+                totalWeight += type.spawnWeight;
+            }
+        }
+
+        if (allowedEnemies.Count == 0) return null;
+
+        // Weighted Random Selection
+        float randomValue = Random.Range(0, totalWeight);
+        float currentWeight = 0;
+
+        foreach (var type in allowedEnemies)
+        {
+            currentWeight += type.spawnWeight;
+            if (randomValue <= currentWeight)
+            {
+                return type.prefab;
+            }
+        }
+
+        return allowedEnemies[0].prefab; // Fallback
+    }
+
+    void ApplyDifficultyModifiers(GameObject enemy)
+    {
+        if (!scaleEnemyStats) return;
+
+        EnemyController stats = enemy.GetComponent<EnemyController>();
+        if (stats != null)
+        {
+            // Calculate multiplier: 1.1 ^ (Level - 1)
+            float multiplier = Mathf.Pow(statMultiplierPerLevel, currentDifficultyLevel - 1);
+
+            // Apply to Max HP
+            stats.maxHealth *= multiplier;
+            stats.health = stats.maxHealth; // Reset current HP to new max
+
+            // Apply to Damage
+            stats.damageToPlayer *= multiplier;
+
+            // Optional: Scale speed slightly less aggressively (half power)
+            // stats.speed *= (1 + (multiplier - 1) * 0.5f);
+        }
+    }
+
+    // --- (Keeping your existing helper methods below) ---
+
     void IncreaseDifficulty()
     {
         currentDifficultyLevel++;
-
-        switch (scalingMode)
+        if (scalingMode == DifficultyScalingMode.SpawnRate || scalingMode == DifficultyScalingMode.Combined)
         {
-            case DifficultyScalingMode.SpawnRate:
-                DecreaseSpawnInterval();
-                break;
-            case DifficultyScalingMode.EnemyCount:
-                // Enemy count is handled in GetEnemyCount()
-                break;
-            case DifficultyScalingMode.EnemyStats:
-                // Stats are applied when spawning
-                break;
-            case DifficultyScalingMode.Combined:
-                DecreaseSpawnInterval();
-                // Other scalings happen automatically
-                break;
+            DecreaseSpawnInterval();
         }
 
-        // Visual feedback
         if (showDifficultyIncrease)
         {
-            Debug.Log($"Difficulty Increased! Level: {currentDifficultyLevel}");
-
+            Debug.Log($"Difficulty Level: {currentDifficultyLevel}");
             if (difficultyIncreaseEffect != null && player != null)
-            {
                 Instantiate(difficultyIncreaseEffect, player.position, Quaternion.identity);
-            }
         }
     }
 
@@ -153,28 +235,6 @@ public class EnemySpawner : MonoBehaviour
         return baseEnemiesPerSpawn;
     }
 
-    void Spawn()
-    {
-        int enemyCount = GetEnemyCount();
-
-        for (int i = 0; i < enemyCount; i++)
-        {
-            Vector3 spawnPos = GetValidSpawnPosition();
-            GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-            ApplyDifficultyModifiers(enemy);
-        }
-    }
-
-    void SpawnWave()
-    {
-        for (int i = 0; i < waveSize; i++)
-        {
-            Vector3 spawnPos = GetValidSpawnPosition();
-            GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-            ApplyDifficultyModifiers(enemy);
-        }
-    }
-
     Vector3 GetValidSpawnPosition()
     {
         Vector3 spawnPos;
@@ -187,103 +247,19 @@ public class EnemySpawner : MonoBehaviour
             Vector2 randomDir = Random.insideUnitCircle.normalized;
             spawnPos = player.position + (Vector3)(randomDir * distance);
             attempts++;
-
-            // If we can't find a valid position after max attempts, just use the last one
-            if (attempts >= maxAttempts)
-                break;
+            if (attempts >= maxAttempts) break;
 
         } while (avoidSpawningNearPlayer && Vector3.Distance(spawnPos, player.position) < safeZoneRadius);
 
         return spawnPos;
     }
 
-    void ApplyDifficultyModifiers(GameObject enemy)
-    {
-        if (scalingMode != DifficultyScalingMode.EnemyStats && scalingMode != DifficultyScalingMode.Combined)
-            return;
-
-        // Try to find common enemy component types and scale them
-
-        // Health scaling
-        // if (scaleEnemyHealth)
-        // {
-        //     var health = enemy.GetComponent<EnemyHealth>();
-        //     if (health != null)
-        //     {
-        //         float multiplier = Mathf.Pow(healthMultiplierPerLevel, currentDifficultyLevel - 1);
-        //         health.maxHealth = Mathf.RoundToInt(health.maxHealth * multiplier);
-        //         health.currentHealth = health.maxHealth;
-        //     }
-        // }
-
-        // Speed scaling
-        // if (scaleEnemySpeed)
-        // {
-        //     var movement = enemy.GetComponent<EnemyMovement>();
-        //     if (movement != null)
-        //     {
-        //         float multiplier = Mathf.Pow(speedMultiplierPerLevel, currentDifficultyLevel - 1);
-        //         movement.speed *= multiplier;
-        //     }
-        // }
-
-        // Damage scaling
-        // if (scaleEnemyDamage)
-        // {
-        //     var combat = enemy.GetComponent<EnemyCombat>();
-        //     if (combat != null)
-        //     {
-        //         float multiplier = Mathf.Pow(damageMultiplierPerLevel, currentDifficultyLevel - 1);
-        //         combat.damage = Mathf.RoundToInt(combat.damage * multiplier);
-        //     }
-        // }
-    }
-
-    // Public methods for external control
-    public void ResetDifficulty()
-    {
-        currentDifficultyLevel = 1;
-        currentInterval = baseInterval;
-        difficultyTimer = difficultyIncreaseInterval;
-    }
-
-    public void SetDifficultyLevel(int level)
-    {
-        currentDifficultyLevel = Mathf.Max(1, level);
-        for (int i = 1; i < currentDifficultyLevel; i++)
-        {
-            DecreaseSpawnInterval();
-        }
-    }
-
-    public int GetCurrentDifficultyLevel()
-    {
-        return currentDifficultyLevel;
-    }
-
-    public float GetCurrentSpawnRate()
-    {
-        return currentInterval;
-    }
-
-    // Visualize spawn range in editor
     void OnDrawGizmosSelected()
     {
         if (player == null) return;
-
-        // Min spawn distance
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(player.position, minSpawnDistance);
-
-        // Max spawn distance
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(player.position, maxSpawnDistance);
-
-        // Safe zone
-        if (avoidSpawningNearPlayer)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(player.position, safeZoneRadius);
-        }
     }
 }

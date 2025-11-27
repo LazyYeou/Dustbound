@@ -117,7 +117,10 @@ public class PlayerStats : MonoBehaviour
         if (AudioManager.instance != null) AudioManager.instance.Play("Death");
 
         // Simple Time Scale stop for now
+        GameOverManager gameOverManager = FindFirstObjectByType<GameOverManager>();
+        gameOverManager.TriggerGameOver();
         Time.timeScale = 0;
+
         Debug.Log("Game Over");
     }
 

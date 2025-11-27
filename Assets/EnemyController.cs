@@ -156,6 +156,7 @@ public class EnemyController : MonoBehaviour
         health -= damage;
 
         ShowDamagePopup(damage, isCrit);
+        Debug.Log(health);
         StartCoroutine(FlashRoutine());
 
         if (shakeOnHit)
