@@ -1,22 +1,22 @@
 fileFormatVersion: 2
-guid: 4d43499a636ab064f924d018daded138
+guid: 019fb46d32f9fea48bcd3fe87e12d3e1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4723107735738678597
-    second: Idle_0
+      213: 3235391904669285130
+    second: Idle-export_0
   - first:
-      213: -7385789195546760866
-    second: Idle_1
+      213: 188701460185578696
+    second: Idle-export_1
   - first:
-      213: 3234629978573100161
-    second: Idle_2
+      213: -3515949086726322597
+    second: Idle-export_2
   - first:
-      213: 6373048116405451881
-    second: Idle_3
+      213: 1008651951351433448
+    second: Idle-export_3
   - first:
-      213: 7264182050183361747
-    second: Idle_4
+      213: 5561065787835273597
+    second: Idle-export_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -138,7 +138,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idle_0
+      name: Idle-export_0
       rect:
         serializedVersion: 2
         x: 0
@@ -153,14 +153,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 54d7a982679db8140800000000000000
-      internalID: 4723107735738678597
+      spriteID: a0bbcf2abcb66ec20800000000000000
+      internalID: 3235391904669285130
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_1
+      name: Idle-export_1
       rect:
         serializedVersion: 2
         x: 64
@@ -175,14 +175,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e596485bbd7608990800000000000000
-      internalID: -7385789195546760866
+      spriteID: 8cc75fe6af66e9200800000000000000
+      internalID: 188701460185578696
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_2
+      name: Idle-export_2
       rect:
         serializedVersion: 2
         x: 128
@@ -197,14 +197,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 184dda4e3d6b3ec20800000000000000
-      internalID: 3234629978573100161
+      spriteID: b5681551fe6d43fc0800000000000000
+      internalID: -3515949086726322597
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_3
+      name: Idle-export_3
       rect:
         serializedVersion: 2
         x: 192
@@ -219,14 +219,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 96cb1dafe7d917850800000000000000
-      internalID: 6373048116405451881
+      spriteID: 8e88e4e0b937ffd00800000000000000
+      internalID: 1008651951351433448
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_4
+      name: Idle-export_4
       rect:
         serializedVersion: 2
         x: 256
@@ -241,8 +241,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3d4b2fc561f8fc460800000000000000
-      internalID: 7264182050183361747
+      spriteID: d71df78cedfdc2d40800000000000000
+      internalID: 5561065787835273597
       vertices: []
       indices: 
       edges: []
@@ -251,7 +251,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b5b6e59a624ce0f4c97adcbc3f26d757
+    spriteID: dd5bc7f1a63cfce44928e53096f0536e
     internalID: 0
     vertices: []
     indices: 
@@ -261,11 +261,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Idle_0: 4723107735738678597
-      Idle_1: -7385789195546760866
-      Idle_2: 3234629978573100161
-      Idle_3: 6373048116405451881
-      Idle_4: 7264182050183361747
+      Idle-export_0: 3235391904669285130
+      Idle-export_1: 188701460185578696
+      Idle-export_2: -3515949086726322597
+      Idle-export_3: 1008651951351433448
+      Idle-export_4: 5561065787835273597
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
