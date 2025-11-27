@@ -3,7 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 10f;
-    public int damage = 10;
+    public float damage = 10f;
     public float critChance = 0.2f; // 20% Chance
     public float critMultiplier = 2f;
     public float knockbackForce = 5f; // How hard to push
@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         {
             // 1. Calculate Crit
             bool isCrit = Random.value < critChance;
-            int finalDamage = damage;
+            float finalDamage = damage;
             if (isCrit) finalDamage = Mathf.RoundToInt(damage * critMultiplier);
 
             // 2. Calculate Knockback Direction (Direction bullet is moving)
