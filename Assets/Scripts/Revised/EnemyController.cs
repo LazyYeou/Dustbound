@@ -242,17 +242,14 @@ public class EnemyController : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         // rb.isKinematic = true;
 
-        // Disable collider
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        // Spawn exp gem
         if (expGemPrefab != null)
         {
             Instantiate(expGemPrefab, transform.position, Quaternion.identity);
         }
 
-        // Start death animation
         if (useDeathAnimation)
         {
             StartCoroutine(PlayDeathAnimation());
@@ -274,7 +271,6 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator PlayDeathAnimation()
     {
-        // Optional: Flash before death
         if (flashOnDeath)
         {
             yield return StartCoroutine(DeathFlash());
@@ -291,7 +287,6 @@ public class EnemyController : MonoBehaviour
             // rb.isKinematic = true;
         }
 
-        // Execute death animation based on type
         switch (deathAnimationType)
         {
             case DeathAnimationType.FadeOnly:
@@ -474,23 +469,19 @@ public class EnemyController : MonoBehaviour
 
         if (distanceToPlayer <= damageRadius)
         {
-            // 2. CHECK: Is the timer ready? (<= 0)
             if (attackTimer <= 0)
             {
                 PlayerStats stats = player.GetComponent<PlayerStats>();
                 if (stats != null)
                 {
-                    // 3. DEAL DAMAGE (Send the full amount, DO NOT multiply by Time.deltaTime)
                     stats.TakeDamage(damageToPlayer);
 
-                    // 4. RESET TIMER
                     attackTimer = attackInterval;
                 }
             }
         }
     }
 
-    // Optional: Visualize in editor
     void OnDrawGizmosSelected()
     {
         if (player != null)

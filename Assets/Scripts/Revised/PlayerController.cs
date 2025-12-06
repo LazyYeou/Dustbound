@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            _spriteRenderer.flipY = false;
+            _spriteRenderer.flipX = false;
         }
     }
 

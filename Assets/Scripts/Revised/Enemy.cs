@@ -15,19 +15,16 @@ public class Enemy : MonoBehaviour
 
     private Vector3 direction;
     private bool isAttacking;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isAttacking = false;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         //Creep
         if (isAttacking == false)
         {
-            //Face towards player
             if (Player.Instance.transform.position.x > transform.position.x)
             {
                 spriteRenderer.flipX = true;
@@ -36,7 +33,6 @@ public class Enemy : MonoBehaviour
             {
                 spriteRenderer.flipX = false;
             }
-            // Move towards player
             if ((Player.Instance.transform.position - transform.position).magnitude > range)
             {
                 direction = (Player.Instance.transform.position - transform.position).normalized;
@@ -51,7 +47,6 @@ public class Enemy : MonoBehaviour
         }
 
     }
-    //Attack (Called at the end of attack animation)
     public void Attack()
     {
         Instantiate(attackFx, transform.position + (Player.Instance.transform.position - transform.position).normalized * range, transform.rotation);

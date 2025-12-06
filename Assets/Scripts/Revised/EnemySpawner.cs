@@ -8,13 +8,12 @@ public class EnemySpawner : MonoBehaviour
     {
         public string name;
         public GameObject prefab;
-        [Range(0f, 100f)] public float spawnWeight = 10f; // Higher number = higher chance
-        public int minDifficultyLevel = 1; // Only spawn after this level
+        [Range(0f, 100f)] public float spawnWeight = 10f;
+        public int minDifficultyLevel = 1;
     }
 
     [Header("Basic Settings")]
     public Transform player;
-    // REPLACED single prefab with a List
     public List<EnemyType> enemyTypes = new List<EnemyType>();
 
     [Header("Spawn Rate Settings")]
@@ -36,8 +35,8 @@ public class EnemySpawner : MonoBehaviour
     public int enemyIncreasePerLevel = 1;
 
     [Header("Enemy Stats Scaling")]
-    public bool scaleEnemyStats = true; // Simplified boolean
-    public float statMultiplierPerLevel = 1.1f; // 10% stronger per level
+    public bool scaleEnemyStats = true;
+    public float statMultiplierPerLevel = 1.1f;
 
     [Header("Spawn Position Settings")]
     public float minSpawnDistance = 10f;
@@ -74,7 +73,6 @@ public class EnemySpawner : MonoBehaviour
     {
         if (player == null) return;
 
-        // Difficulty Timer
         difficultyTimer -= Time.deltaTime;
         if (difficultyTimer <= 0)
         {
@@ -82,7 +80,6 @@ public class EnemySpawner : MonoBehaviour
             difficultyTimer = difficultyIncreaseInterval;
         }
 
-        // Wave Logic
         if (isInWaveCooldown)
         {
             timer -= Time.deltaTime;
@@ -94,7 +91,6 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
-        // Spawn Timer
         timer -= Time.deltaTime;
         if (timer <= 0)
         {
@@ -111,8 +107,6 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
-
-    // --- NEW SPAWN LOGIC ---
 
     void Spawn()
     {
@@ -134,7 +128,6 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnSingleEnemy()
     {
-        // 1. Pick a random enemy based on weights and level
         GameObject prefabToSpawn = GetRandomEnemyPrefab();
 
         if (prefabToSpawn != null)
@@ -142,14 +135,12 @@ public class EnemySpawner : MonoBehaviour
             Vector3 spawnPos = GetValidSpawnPosition();
             GameObject enemy = Instantiate(prefabToSpawn, spawnPos, Quaternion.identity);
 
-            // 2. Make them stronger based on level
             ApplyDifficultyModifiers(enemy);
         }
     }
 
     GameObject GetRandomEnemyPrefab()
     {
-        // Filter list: Get only enemies allowed at this difficulty level
         List<EnemyType> allowedEnemies = new List<EnemyType>();
         float totalWeight = 0f;
 
@@ -164,7 +155,6 @@ public class EnemySpawner : MonoBehaviour
 
         if (allowedEnemies.Count == 0) return null;
 
-        // Weighted Random Selection
         float randomValue = Random.Range(0, totalWeight);
         float currentWeight = 0;
 
@@ -177,7 +167,7 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        return allowedEnemies[0].prefab; // Fallback
+        return allowedEnemies[0].prefab;
     }
 
     void ApplyDifficultyModifiers(GameObject enemy)
@@ -187,22 +177,14 @@ public class EnemySpawner : MonoBehaviour
         EnemyController stats = enemy.GetComponent<EnemyController>();
         if (stats != null)
         {
-            // Calculate multiplier: 1.1 ^ (Level - 1)
             float multiplier = Mathf.Pow(statMultiplierPerLevel, currentDifficultyLevel - 1);
 
-            // Apply to Max HP
             stats.maxHealth *= multiplier;
-            stats.health = stats.maxHealth; // Reset current HP to new max
+            stats.health = stats.maxHealth;
 
-            // Apply to Damage
             stats.damageToPlayer *= multiplier;
-
-            // Optional: Scale speed slightly less aggressively (half power)
-            // stats.speed *= (1 + (multiplier - 1) * 0.5f);
         }
     }
-
-    // --- (Keeping your existing helper methods below) ---
 
     void IncreaseDifficulty()
     {
