@@ -14,14 +14,14 @@ public class WeaponController : MonoBehaviour
     [Header("Spawn Enhancement")]
     public SpawnPattern spawnPattern = SpawnPattern.Single;
     public int burstCount = 3;
-    public float burstSpread = 15f; // Angle spread for burst/spread shots
-    public float spiralAngleIncrement = 30f; // For spiral pattern
+    public float burstSpread = 15f;
+    public float spiralAngleIncrement = 30f;
     private float currentSpiralAngle = 0f;
 
     [Header("Visual Effects")]
     public GameObject muzzleFlashPrefab;
     public float muzzleFlashDuration = 0.1f;
-    public Transform[] firePoints; // Multiple spawn points for variety
+    public Transform[] firePoints;
     private int currentFirePointIndex = 0;
 
     [Header("Screen Shake")]
@@ -54,7 +54,6 @@ public class WeaponController : MonoBehaviour
         if (bulletPrefab == null)
             Debug.LogWarning($"WeaponController on '{gameObject.name}' has no bulletPrefab assigned.");
 
-        // If no fire points assigned, use this transform
         if (firePoints == null || firePoints.Length == 0)
         {
             firePoints = new Transform[] { transform };
@@ -91,7 +90,6 @@ public class WeaponController : MonoBehaviour
             dir = player.lastFacingDir;
         }
 
-        // Execute pattern-specific shooting
         switch (spawnPattern)
         {
             case SpawnPattern.Single:
@@ -109,9 +107,6 @@ public class WeaponController : MonoBehaviour
             case SpawnPattern.Alternating:
                 SpawnAlternatingBullet(dir);
                 break;
-                // case SpawnPattern.Wave:
-                //     SpawnWaveBullet(dir);
-                //     break;
         }
 
         // Spawn muzzle flash
@@ -151,7 +146,7 @@ public class WeaponController : MonoBehaviour
             );
 
             Vector3 spawnPos = GetCurrentFirePoint().position;
-            CreateBullet(spawnPos, bulletDir, angleOffset, i * 0.05f); // Slight delay per bullet
+            CreateBullet(spawnPos, bulletDir, angleOffset, i * 0.05f);
         }
     }
 
@@ -170,7 +165,6 @@ public class WeaponController : MonoBehaviour
             );
 
             Vector3 spawnPos = GetCurrentFirePoint().position;
-            // Add slight random offset to spawn position
             spawnPos += (Vector3)Random.insideUnitCircle * 0.2f;
             CreateBullet(spawnPos, bulletDir, randomAngle);
         }
@@ -228,7 +222,6 @@ public class WeaponController : MonoBehaviour
 
         GameObject b = Instantiate(bulletPrefab, position, rotation);
 
-        // --- NEW: APPLY STATS TO BULLET ---
         Bullet bulletComp = b.GetComponent<Bullet>();
         if (bulletComp != null && player != null)
         {
@@ -236,12 +229,9 @@ public class WeaponController : MonoBehaviour
             bool isCrit = Random.value < player.critChance;
             float finalMult = player.damageMultiplier * (isCrit ? player.critDamage : 1f);
 
-            // Assuming your Bullet script has a 'damage' and 'Setup' method
-            // If not, you need to add public float damage to your Bullet script
             bulletComp.damage *= finalMult;
             bulletComp.Setup(direction);
         }
-        // ----------------------------------
 
         if (scaleInBullets) StartCoroutine(ScaleInBullet(b.transform));
 

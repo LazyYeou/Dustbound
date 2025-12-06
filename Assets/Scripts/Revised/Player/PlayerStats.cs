@@ -18,11 +18,11 @@ public class PlayerStats : MonoBehaviour
     public int level = 1;
 
     [Header("--- Advanced Stats (Upgradable) ---")]
-    public float defense = 0f;              // Reduces incoming damage
-    public float expEfficiency = 1.0f;      // Multiplies XP gained (1.0 = 100%)
-    public float damageMultiplier = 1.0f;   // Multiplies bullet damage
-    public float critChance = 0f;           // 0.1 = 10% chance
-    public float critDamage = 1.5f;         // 1.5 = 150% damage on crit
+    public float defense = 0f;
+    public float expEfficiency = 1.0f;
+    public float damageMultiplier = 1.0f;
+    public float critChance = 0f;
+    public float critDamage = 1.5f;
 
     [Header("--- UI References ---")]
     public Slider hpSlider;
@@ -63,14 +63,10 @@ public class PlayerStats : MonoBehaviour
 
         if (animator != null)
         {
-            // Check if we are moving
             bool isMoving = moveDir.magnitude > 0;
 
-            // Send this boolean to the Unity Animator
-            // Make sure the parameter name "IsMoving" matches EXACTLY what we set in the Editor later
             animator.SetBool("IsMoving", isMoving);
 
-            // Ensure speed is always 1 (in case you had the old Freeze code)
             animator.speed = 1f;
         }
     }
@@ -79,16 +75,12 @@ public class PlayerStats : MonoBehaviour
     {
         if (rb != null)
         {
-            // Using velocity for compatibility
             rb.linearVelocity = moveDir * moveSpeed;
         }
     }
 
-    // --- COMBAT & STATS LOGIC ---
-
     public void TakeDamage(float amount)
     {
-        // Apply Defense Logic: Damage - Defense (Minimum 1 damage)
         float damageToTake = Mathf.Max(1, amount - defense);
 
         if (AudioManager.instance != null) AudioManager.instance.Play("Damage");
@@ -103,7 +95,6 @@ public class PlayerStats : MonoBehaviour
 
     public void GainExp(float amount)
     {
-        // Apply Exp Efficiency Logic
         currentExp += amount * expEfficiency;
 
         if (currentExp >= maxExp)
@@ -119,13 +110,11 @@ public class PlayerStats : MonoBehaviour
         currentExp -= maxExp;
         maxExp *= 1.2f;
 
-        // Heal on level up
         currentHealth = maxHealth;
         UpdateHealthUI();
 
         if (AudioManager.instance != null) AudioManager.instance.Play("LevelUp");
 
-        // --- TRIGGER UPGRADE SYSTEM HERE ---
         UpgradeManager.instance.ShowUpgradeOptions();
     }
 
@@ -133,7 +122,6 @@ public class PlayerStats : MonoBehaviour
     {
         if (AudioManager.instance != null) AudioManager.instance.Play("Death");
 
-        // Simple Time Scale stop for now
         GameOverManager gameOverManager = FindFirstObjectByType<GameOverManager>();
         gameOverManager.TriggerGameOver();
         Time.timeScale = 0;

@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[System.Serializable] // This makes it visible in the Inspector
+[System.Serializable]
 public class Sound
 {
-    public string name;           
-    public AudioClip clip;        
+    public string name;
+    public AudioClip clip;
 
     [Range(0f, 1f)]
     public float volume = 1f;
@@ -15,5 +15,5 @@ public class Sound
     public bool loop;
 
     [HideInInspector]
-    public AudioSource source;    
+    public AudioSource source;
 }

@@ -18,7 +18,6 @@ public class UpgradeCardUI : MonoBehaviour
 
         titleText.text = upgrade.name;
         descriptionText.text = upgrade.description;
-        // iconImage.sprite = upgrade.icon; // Uncomment if you have icons
 
         selectButton.onClick.RemoveAllListeners();
         selectButton.onClick.AddListener(() => UpgradeManager.instance.ApplyUpgrade(myUpgrade));
